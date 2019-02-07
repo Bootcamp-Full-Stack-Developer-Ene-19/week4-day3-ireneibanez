@@ -1,0 +1,174 @@
+:root {
+    --font-family: 'Montserrat', sans-serif;
+    --regular: 400;
+    --bold: 700;
+
+    --primary-color: #ff0066;
+    --secondary-color: #333333;
+    --background-color: #fafafa;
+
+    --code-text-color: #f8f8f8;
+    --code-background-color: #424242;
+}
+
+body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-family);
+    color: var(--secondary-color);
+}
+
+body * {
+    box-sizing: inherit;
+}
+
+//Ejercicio 1
+
+$color: random(360);
+
+@function creating-color($i) {
+    @return hsl($color, ($i * 10) * 1%, ($i * 10) * 1%);
+}
+
+.container {
+    margin: 30px;
+    height: 40px;
+    width: 400px;
+
+    display: flex;
+}
+
+.container>div {
+    width: 40px;
+    border: 1px solid #000;
+}
+
+@for $i from 1 through 10 {
+    div:nth-child(#{$i}) {
+        background-color: creating-color($i);
+    }
+}
+
+
+
+//Ejercicio 2
+
+$offset: (
+0: 0,
+8: 0.5rem,
+16: 1rem,
+24: 1.5rem,
+32: 2rem,
+40: 2.5rem,
+48: 3rem,
+);
+
+//.m-32 { margin: 2rem; }
+
+//.pb-16 { padding-bottom: 1rem; }
+
+$position: (
+m: default,
+t: top,
+r: right,
+l: left,
+b: bottom,
+);
+
+
+@each $element, $pos in $offset {
+
+    @each $key, $value in $position {
+        @if ($key !=m) {
+            .m#{$key}-#{$element} {
+                margin-#{$value}: $pos;
+            }
+            .p#{$key}-#{$element} {
+                padding-#{$value}: $pos;
+            }
+        }
+        @else {
+            .m-#{$element} {
+                margin: $pos;
+            }
+            .p-#{$element} {
+                padding: $pos;
+            }
+        }
+    }
+}
+
+
+//Ejercicio 3
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;  
+    width: 500px;  
+}
+
+@function btn-color() { 
+    @return rgb(50 + random(200), 50 + random(200), 50 + random(200));
+    //@return $btn-color#{$i}: rgb(50 + random(200), 50 + random(200), 50 + random(200));
+}
+
+
+@for $i from 1 through 12 {
+    .btn:nth-child(#{$i}) {
+        $btn-color: btn-color();   
+    } 
+}
+
+@for $i from 1 through 12 {
+    .btn:nth-child(#{$i}) {
+        $btn-bgcolor: btn-color();   
+    } 
+}
+
+
+%button {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 13px;
+    margin: 15px;
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #fff;
+}
+
+@mixin btn-color() {
+    $btn-bgcolor: btn-color();
+    $btn-color: btn-color();
+    background-color: $btn-color; ;
+    color: $btn-bgcolor;
+    &:hover {
+        background-color: $btn-color; ;
+        color: $btn-bgcolor;
+    }
+}
+
+
+
+.btn {
+    @include btn-color();
+    @extend %button;
+}
+
+.btn--small {
+    font-size: 12px;
+}
+
+.btn--large {
+    font-size: 20px;
+}
+
